@@ -1,10 +1,11 @@
 import { Component, input, Input } from '@angular/core';
 import { TaskComponent } from './task/task.component';
 import { Task } from './task/task.model';
+import { NewTaskComponent } from './new-task/new-task.component';
 @Component({
   selector: 'tasks',
   standalone: true,
-  imports: [TaskComponent],
+  imports: [TaskComponent, NewTaskComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
@@ -36,11 +37,19 @@ export class TasksComponent {
   ];
   @Input({ required: true }) Id!: string;
   @Input({ required: true }) name!: string;
+  isAddingTask:boolean = false;
 
+  addTask(){
+    console.log("inside adding task function")
+    this.isAddingTask=true;
+  }
  get selectedUserTasks(){
  return this.tasks.filter((task)=>{return task.userId==this.Id})
  }
 onCompleteTask(id:string){
-  this.tasks = this.tasks.filter((task)=>task.id!==id)
+}
+onCancelTask(){
+  this.isAddingTask = true; 
+  
 }
 }
