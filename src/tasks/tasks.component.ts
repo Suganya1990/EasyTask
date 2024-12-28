@@ -1,7 +1,8 @@
 import { Component, input, Input } from '@angular/core';
 import { TaskComponent } from './task/task.component';
-import { Task } from './task/task.model';
+import { NewTaskData, Task } from './task/task.model';
 import { NewTaskComponent } from './new-task/new-task.component';
+import { dummyTasks } from '../dummy-tasks';
 @Component({
   selector: 'tasks',
   standalone: true,
@@ -10,46 +11,33 @@ import { NewTaskComponent } from './new-task/new-task.component';
   styleUrl: './tasks.component.css',
 })
 export class TasksComponent {
-  tasks = [
-    {
-      id: 't1',
-      userId: 'u1',
-      title: 'Master Angular',
-      summary:
-        'Learn all the basic and advanced features of Angular & how to apply them.',
-      dueDate: '2025-12-31',
-    },
-    {
-      id: 't2',
-      userId: 'u3',
-      title: 'Build first prototype',
-      summary: 'Build a first prototype of the online shop website',
-      dueDate: '2024-05-31',
-    },
-    {
-      id: 't3',
-      userId: 'u3',
-      title: 'Prepare issue template',
-      summary:
-        'Prepare and describe an issue template which will help with project management',
-      dueDate: '2024-06-15',
-    },
-  ];
+  tasks = dummyTasks
   @Input({ required: true }) Id!: string;
   @Input({ required: true }) name!: string;
-  isAddingTask:boolean = false;
+  isAddingTask: boolean = false;
 
-  addTask(){
-    console.log("inside adding task function")
-    this.isAddingTask=true;
+  addTask() {
+    this.isAddingTask = true;
   }
- get selectedUserTasks(){
- return this.tasks.filter((task)=>{return task.userId==this.Id})
- }
-onCompleteTask(id:string){
-}
-onCancelTask(){
-  this.isAddingTask = true; 
-  
-}
+  get selectedUserTasks() {
+    return this.tasks.filter((task) => {
+      return task.userId == this.Id;
+    });
+  }
+  onCompleteTask(id: string) {}
+  onCancelTask() {
+    this.isAddingTask = false;
+  }
+  onAddTask(taskData: NewTaskData) {
+    console.log("Inside onAddTask Data received: " + taskData)
+    this.tasks.push({
+      id: new Date().getTime().toString(),
+      userId: this.Id,
+      title: taskData.title,
+      summary: taskData.summary,
+      dueDate: taskData.date,
+    });
+    this.isAddingTask= false
+
+  }
 }
